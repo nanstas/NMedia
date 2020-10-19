@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Nmedia</string>
     <string name="nmedia">NMedia!</string>
+    <string name="post_menu">Post menu</string>
+    <string name="post_avatar">Post avatar</string>
+    <string name="icon_favorite" translatable="false">Icon favorite</string>
+    <string name="icon_share" translatable="false">Icon share</string>
+    <string name="icon_visibility" translatable="false">Icon visibility</string>
+    <string name="end_line">End line</string>
 </resources>
