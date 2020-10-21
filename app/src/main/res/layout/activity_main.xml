@@ -81,7 +81,7 @@
         app:constraint_referenced_ids="contentTextView" />
 
     <ImageView
-        android:id="@+id/likeTextView"
+        android:id="@+id/likeImageView"
         android:layout_width="@dimen/posts_heart_size"
         android:layout_height="@dimen/posts_heart_size"
         android:layout_marginTop="@dimen/common_spacing"
@@ -97,7 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/half_common_spacing"
         android:layout_marginTop="@dimen/common_spacing"
-        app:layout_constraintStart_toEndOf="@+id/likeTextView"
+        app:layout_constraintStart_toEndOf="@+id/likeImageView"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
         tools:text="@sample/posts.json/data/likeCounts" />
 
@@ -154,7 +154,7 @@
         android:background="@color/colorEndLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/likeTextView"
+        app:layout_constraintTop_toBottomOf="@id/likeImageView"
         tools:srcCompat="@drawable/ic_line"
         android:contentDescription="@string/end_line" />
 
