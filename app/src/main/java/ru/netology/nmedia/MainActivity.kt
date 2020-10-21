@@ -30,17 +30,17 @@ class MainActivity : AppCompatActivity() {
             shareCounts.text = numToPostfix(post.countShares)
 
             if (post.likedByMe) {
-                favorite.setImageResource(R.drawable.ic_baseline_favorite_active_24)
+                favorite.setImageResource(R.drawable.ic_baseline_like_active_24)
             }
 
             favorite.setOnClickListener {
                 post.likedByMe = !post.likedByMe
 
                 if (post.likedByMe) {
-                    favorite.setImageResource(R.drawable.ic_baseline_favorite_active_24)
+                    favorite.setImageResource(R.drawable.ic_baseline_like_active_24)
                     favoriteCounts.text = numToPostfix(++post.countLikes)
                 } else {
-                    favorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                    favorite.setImageResource(R.drawable.ic_baseline_like_border_24)
                     favoriteCounts.text = numToPostfix(--post.countLikes)
                 }
             }
