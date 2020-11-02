@@ -12,4 +12,6 @@
     <string name="post_text">Post Text</string>
     <string name="menu_edit">Edit</string>
     <string name="error_empty_content">Content can\'t be empty</string>
+    <string name="edit_bar">Edit message</string>
+    <string name="cancel_button">Cancel edit</string>
 </resources>

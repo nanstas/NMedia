@@ -13,8 +13,37 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/toolsTop"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/card_post"
-        />
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="-27dp"
+        tools:listitem="@layout/card_post" />
+
+    <TextView
+        android:id="@+id/barEditTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:hint="@string/edit_bar"
+        android:padding="@dimen/common_spacing"
+        app:layout_constraintEnd_toStartOf="@id/saveImageButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/toolsTop" />
+
+    <ImageButton
+        android:id="@+id/cancelImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/cancel_button"
+        app:layout_constraintBottom_toBottomOf="@+id/listRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_cancel_48" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:constraint_referenced_ids="barEditTextView,cancelImageButton" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/toolsTop"
@@ -27,16 +56,16 @@
         android:id="@+id/contentEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/post_text"
-        android:inputType="textMultiLine"
         android:background="@android:color/transparent"
-        android:padding="@dimen/common_spacing"
+        android:hint="@string/post_text"
         android:importantForAutofill="no"
-        app:layout_constraintTop_toTopOf="@id/toolsTop"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/common_spacing"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/saveImageButton"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="@id/toolsTop"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageButton
         android:id="@+id/saveImageButton"
@@ -48,6 +77,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/contentEditText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/ic_save_48"
-        />
+        app:srcCompat="@drawable/ic_save_48" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,9 +2,11 @@ package ru.netology.nmedia.activity
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
+                groupCancel.visibility = View.VISIBLE
             }
 
             override fun onRemove(post: Post) {
@@ -66,7 +69,16 @@ class MainActivity : AppCompatActivity() {
 
                 viewModel.changeContent(text.toString())
                 viewModel.save()
+                groupCancel.visibility = View.INVISIBLE
+                setText("")
+                clearFocus()
+                Utils.hideKeyboard(this)
+            }
+        }
 
+        binding.cancelImageButton.setOnClickListener {
+            with(binding.contentEditText) {
+                groupCancel.visibility = View.INVISIBLE
                 setText("")
                 clearFocus()
                 Utils.hideKeyboard(this)
