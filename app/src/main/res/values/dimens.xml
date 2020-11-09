@@ -4,4 +4,6 @@
     <dimen name="half_common_spacing">8dp</dimen>
     <dimen name="posts_avatar_size">48dp</dimen>
     <dimen name="posts_heart_size">24dp</dimen>
+    <dimen name="icon_button_padding">12dp</dimen>
+    <dimen name="icon_button_min_size">48dp</dimen>
 </resources>

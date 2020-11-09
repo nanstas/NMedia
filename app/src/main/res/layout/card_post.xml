@@ -45,16 +45,16 @@
         app:layout_constraintTop_toBottomOf="@id/authorTextView"
         tools:text="@sample/posts.json/data/published" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/menuImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/common_spacing"
-        android:background="@android:color/transparent"
         android:contentDescription="@string/post_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_more_vert_24" />
+        app:icon="@drawable/ic_more_vert_24"
+        style="@style/AppCheckableButton" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
@@ -81,71 +81,47 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="contentTextView" />
 
-    <ImageView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/likeImageView"
-        android:layout_width="@dimen/posts_heart_size"
-        android:layout_height="@dimen/posts_heart_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_spacing"
-        android:background="@android:color/transparent"
         android:contentDescription="@string/icon_favorite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
-        app:srcCompat="@drawable/ic_baseline_like_border_24" />
+        android:checkable="true"
+        app:icon="@drawable/selector_like"
+        app:iconTint="@color/selector_like_color"
+        tools:text="0"
+        style="@style/AppCheckableButton" />
 
-    <TextView
-        android:id="@+id/likeCountsTextView"
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/shareImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/half_common_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
-        app:layout_constraintStart_toEndOf="@+id/likeImageView"
-        app:layout_constraintTop_toBottomOf="@id/barrier2"
-        tools:text="@sample/posts.json/data/likeCounts" />
-
-    <ImageView
-        android:id="@+id/shareImageView"
-        android:layout_width="@dimen/posts_heart_size"
-        android:layout_height="@dimen/posts_heart_size"
         android:layout_marginStart="@dimen/common_spacing"
         android:layout_marginTop="@dimen/common_spacing"
-        android:background="@android:color/transparent"
-        app:layout_constraintStart_toEndOf="@id/likeCountsTextView"
+        android:contentDescription="@string/icon_share"
+        app:layout_constraintStart_toEndOf="@id/likeImageView"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
-        app:srcCompat="@drawable/ic_baseline_share_24"
-        android:contentDescription="@string/icon_share" />
+        app:icon="@drawable/ic_baseline_share_24"
+        tools:text="0"
+        style="@style/AppCheckableButton" />
 
-    <TextView
-        android:id="@+id/shareCountsTextView"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/visibilityImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/half_common_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
-        app:layout_constraintStart_toEndOf="@+id/shareImageView"
-        app:layout_constraintTop_toBottomOf="@id/barrier2"
-        tools:text="@sample/posts.json/data/shareCounts" />
-
-    <ImageView
-        android:id="@+id/visibilityImageView"
-        android:layout_width="@dimen/posts_heart_size"
-        android:layout_height="@dimen/posts_heart_size"
         android:layout_marginStart="@dimen/common_spacing"
         android:layout_marginTop="@dimen/common_spacing"
         android:layout_marginEnd="@dimen/half_common_spacing"
-        android:background="@android:color/transparent"
-        app:layout_constraintEnd_toStartOf="@id/visibilityCountsTextView"
-        app:layout_constraintTop_toBottomOf="@id/barrier2"
-        app:srcCompat="@drawable/ic_baseline_visibility_24"
-        android:contentDescription="@string/icon_visibility" />
-
-    <TextView
-        android:id="@+id/visibilityCountsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/half_common_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
+        android:contentDescription="@string/icon_visibility"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
-        tools:text="@sample/posts.json/data/visibilityCounts" />
+        app:icon="@drawable/ic_baseline_visibility_24"
+        tools:text="0"
+        style="@style/AppCheckableButton" />
 
     <ImageView
         android:id="@+id/endLineImageView"
