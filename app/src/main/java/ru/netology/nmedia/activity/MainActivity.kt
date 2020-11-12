@@ -18,7 +18,11 @@ import ru.netology.nmedia.utils.Utils
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
-    private val newPostRequestCode = 1
+    companion object {
+        private const val NEW_POST_REQUEST_CODE = 1
+        private const val EDIT_POST_REQUEST_CODE = 2
+    }
+
     val viewModel: PostViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,9 +33,19 @@ class MainActivity : AppCompatActivity() {
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
-//                groupCancel.visibility = View.VISIBLE
-                val intent = Intent(this@MainActivity, NewPostActivity::class.java)
-                startActivityForResult(intent, newPostRequestCode)
+
+                Intent(Intent.ACTION_SEND)
+                    .putExtra(Intent.EXTRA_TEXT, post.content)
+                    .setType("text/plain")
+                    .setClass(this@MainActivity, EditPostActivity::class.java)
+                    .also {
+                        if (it.resolveActivity(packageManager) == null) {
+                            Toast.makeText(this@MainActivity, "app not found", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            startActivityForResult(it, EDIT_POST_REQUEST_CODE)
+                        }
+                    }
             }
 
             override fun onRemove(post: Post) {
@@ -52,54 +66,27 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(posts)
         }
 
-        viewModel.edited.observe(this, { post ->
-            if (post.id == 0L) {
-                return@observe
-            }
-//            with(binding.contentEditText) {
-//                requestFocus()
-//                setText(post.content)
-//            }
-        })
-
         binding.fab.setOnClickListener {
             val intent = Intent(this@MainActivity, NewPostActivity::class.java)
-            startActivityForResult(intent, newPostRequestCode)
+            startActivityForResult(intent, NEW_POST_REQUEST_CODE)
         }
 
-//        binding.saveImageButton.setOnClickListener {
-//            with(binding.contentEditText) {
-//                if (TextUtils.isEmpty(text)) {
-//                    Toast.makeText(
-//                        this@MainActivity,
-//                        context.getString(R.string.error_empty_content),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    return@setOnClickListener
-//                }
-//
-//                viewModel.changeContent(text.toString())
-//                viewModel.save()
-//                groupCancel.visibility = View.INVISIBLE
-//                setText("")
-//                clearFocus()
-//                Utils.hideKeyboard(this)
-//            }
-//        }
-//
-//        binding.cancelImageButton.setOnClickListener {
-//            with(binding.contentEditText) {
-//                groupCancel.visibility = View.INVISIBLE
-//                setText("")
-//                clearFocus()
-//                Utils.hideKeyboard(this)
-//            }
-//        }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            newPostRequestCode -> {
+            NEW_POST_REQUEST_CODE -> {
+                if (resultCode != Activity.RESULT_OK) {
+                    return
+                }
+
+                data?.getStringExtra(Intent.EXTRA_TEXT)?.let {
+                    viewModel.changeContent(it)
+                    viewModel.save()
+                }
+            }
+
+            EDIT_POST_REQUEST_CODE -> {
                 if (resultCode != Activity.RESULT_OK) {
                     return
                 }
