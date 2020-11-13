@@ -28,7 +28,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.NewPostActivity" android:windowSoftInputMode="stateVisible" />
     </application>
 
 </manifest>

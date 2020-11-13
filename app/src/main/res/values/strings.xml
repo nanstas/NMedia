@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Nmedia</string>
-    <string name="nmedia">NMedia!</string>
     <string name="post_menu">Post menu</string>
     <string name="post_avatar">Post avatar</string>
     <string name="icon_favorite" translatable="false">Icon favorite</string>
@@ -9,9 +8,6 @@
     <string name="end_line">End line</string>
     <string name="description_post_save">Save</string>
     <string name="menu_remove">Remove</string>
-    <string name="post_text">Post Text</string>
     <string name="menu_edit">Edit</string>
     <string name="error_empty_content">Content can\'t be empty</string>
-    <string name="edit_bar">Edit message</string>
-    <string name="cancel_button">Cancel edit</string>
 </resources>

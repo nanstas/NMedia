@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
                 Intent(Intent.ACTION_SEND)
                     .putExtra(Intent.EXTRA_TEXT, post.content)
+                    .putExtra("REQUEST_CODE", EDIT_POST_REQUEST_CODE)
                     .setType("text/plain")
                     .setClass(this@MainActivity, EditPostActivity::class.java)
                     .also {
@@ -67,11 +68,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fab.setOnClickListener {
-            val intent = Intent(this@MainActivity, NewPostActivity::class.java)
+            val intent = Intent(this@MainActivity, EditPostActivity::class.java)
             startActivityForResult(intent, NEW_POST_REQUEST_CODE)
         }
 
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {

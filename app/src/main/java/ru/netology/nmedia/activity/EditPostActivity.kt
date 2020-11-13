@@ -12,6 +12,10 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.ActivityEditPostBinding
 
 class EditPostActivity : AppCompatActivity() {
+    companion object {
+        private const val EDIT_POST_REQUEST_CODE = 2
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_post)
@@ -20,34 +24,30 @@ class EditPostActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         intent?.let {
-            if (it.action != Intent.ACTION_SEND) {
-                return@let
+            if (it.extras?.getInt("REQUEST_CODE") == EDIT_POST_REQUEST_CODE) {
+                val text = it.getStringExtra(Intent.EXTRA_TEXT)
+                if (text.isNullOrBlank()) {
+                    Snackbar.make(binding.root, R.string.error_empty_content, LENGTH_INDEFINITE)
+                        .setAction(android.R.string.ok) {
+                            finish()
+                        }
+                        .show()
+                    return@let
+                }
+                binding.contentEditText.setText(text, TextView.BufferType.EDITABLE)
             }
 
-            val text = it.getStringExtra(Intent.EXTRA_TEXT)
-            if (text.isNullOrBlank()) {
-                Snackbar.make(binding.root, R.string.error_empty_content, LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok) {
-                        finish()
-                    }
-                    .show()
-                return@let
+            binding.ok.setOnClickListener {
+                val intent = Intent()
+                if (binding.contentEditText.text.isNullOrBlank()) {
+                    setResult(Activity.RESULT_CANCELED, intent)
+                } else {
+                    val content = binding.contentEditText.text.toString()
+                    intent.putExtra(Intent.EXTRA_TEXT, content)
+                    setResult(Activity.RESULT_OK, intent)
+                }
+                finish()
             }
-            binding.contentEditText.setText(text, TextView.BufferType.EDITABLE)
         }
-
-        binding.contentEditText.requestFocus();
-        binding.ok.setOnClickListener {
-            val intent = Intent()
-            if (binding.contentEditText.text.isNullOrBlank()) {
-                setResult(Activity.RESULT_CANCELED, intent)
-            } else {
-                val content = binding.contentEditText.text.toString()
-                intent.putExtra(Intent.EXTRA_TEXT, content)
-                setResult(Activity.RESULT_OK, intent)
-            }
-            finish()
-        }
-
     }
 }
