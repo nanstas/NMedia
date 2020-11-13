@@ -2,6 +2,7 @@ package ru.netology.nmedia.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -60,6 +61,11 @@ class MainActivity : AppCompatActivity() {
             override fun onShare(post: Post) {
                 viewModel.shareById(post.id)
             }
+
+            override fun onPlay(post: Post) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
+                startActivity(intent)
+            }
         })
 
         binding.listRecyclerView.adapter = adapter
@@ -71,7 +77,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, EditPostActivity::class.java)
             startActivityForResult(intent, NEW_POST_REQUEST_CODE)
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

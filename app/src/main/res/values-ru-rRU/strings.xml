@@ -5,7 +5,9 @@
     <string name="post_avatar">Аватар поста</string>
     <string name="end_line">Конец поста</string>
     <string name="description_post_save">Сохранить</string>
+    <string name="description_post_cancel">Отменить</string>
     <string name="menu_remove">Удалить</string>
     <string name="menu_edit">Редактировать</string>
     <string name="error_empty_content">Контент не может быть пустым</string>
+    <string name="play_video">Воспроизвести видео</string>
 </resources>
