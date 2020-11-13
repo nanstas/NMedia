@@ -37,6 +37,12 @@ class EditPostActivity : AppCompatActivity() {
                 binding.contentEditText.setText(text, TextView.BufferType.EDITABLE)
             }
 
+            binding.cancel.setOnClickListener {
+                val intent = Intent()
+                setResult(Activity.RESULT_CANCELED, intent)
+                finish()
+            }
+
             binding.ok.setOnClickListener {
                 val intent = Intent()
                 if (binding.contentEditText.text.isNullOrBlank()) {
