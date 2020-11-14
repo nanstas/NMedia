@@ -14,7 +14,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             published = "23 сентября в 10:12",
             likedByMe = false,
             countLikes = 1_999_999,
-            countShares = 999
+            countShares = 999,
+            video = "https://www.youtube.com/watch?v=WhWc3b3KhnY"
         ),
         Post(
             id = nextId++,
@@ -32,7 +33,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             published = "22 сентября в 10:12",
             likedByMe = false,
             countLikes = 1_000,
-            countShares = 10
+            countShares = 10,
+            video = "https://www.youtube.com/watch?v=1Rkn6rnsgc4"
         ),
         Post(
             id = nextId++,

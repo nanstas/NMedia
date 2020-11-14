@@ -1,5 +1,8 @@
 package ru.netology.nmedia.activity
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -16,16 +19,35 @@ import ru.netology.nmedia.utils.Utils
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        private const val NEW_POST_REQUEST_CODE = 1
+        private const val EDIT_POST_REQUEST_CODE = 2
+    }
+
+    val viewModel: PostViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val viewModel: PostViewModel by viewModels()
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
-                groupCancel.visibility = View.VISIBLE
+
+                Intent(Intent.ACTION_SEND)
+                    .putExtra(Intent.EXTRA_TEXT, post.content)
+                    .putExtra("REQUEST_CODE", EDIT_POST_REQUEST_CODE)
+                    .setType("text/plain")
+                    .setClass(this@MainActivity, EditPostActivity::class.java)
+                    .also {
+                        if (it.resolveActivity(packageManager) == null) {
+                            Toast.makeText(this@MainActivity, "app not found", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            startActivityForResult(it, EDIT_POST_REQUEST_CODE)
+                        }
+                    }
             }
 
             override fun onRemove(post: Post) {
@@ -39,6 +61,11 @@ class MainActivity : AppCompatActivity() {
             override fun onShare(post: Post) {
                 viewModel.shareById(post.id)
             }
+
+            override fun onPlay(post: Post) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
+                startActivity(intent)
+            }
         })
 
         binding.listRecyclerView.adapter = adapter
@@ -46,42 +73,35 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(posts)
         }
 
-        viewModel.edited.observe(this, { post ->
-            if (post.id == 0L) {
-                return@observe
-            }
-            with(binding.contentEditText) {
-                requestFocus()
-                setText(post.content)
-            }
-        })
+        binding.fab.setOnClickListener {
+            val intent = Intent(this@MainActivity, EditPostActivity::class.java)
+            startActivityForResult(intent, NEW_POST_REQUEST_CODE)
+        }
+    }
 
-        binding.saveImageButton.setOnClickListener {
-            with(binding.contentEditText) {
-                if (TextUtils.isEmpty(text)) {
-                    Toast.makeText(
-                        this@MainActivity,
-                        context.getString(R.string.error_empty_content),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setOnClickListener
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            NEW_POST_REQUEST_CODE -> {
+                if (resultCode != Activity.RESULT_OK) {
+                    return
                 }
 
-                viewModel.changeContent(text.toString())
-                viewModel.save()
-                groupCancel.visibility = View.INVISIBLE
-                setText("")
-                clearFocus()
-                Utils.hideKeyboard(this)
+                data?.getStringExtra(Intent.EXTRA_TEXT)?.let {
+                    viewModel.changeContent(it)
+                    viewModel.save()
+                }
             }
-        }
 
-        binding.cancelImageButton.setOnClickListener {
-            with(binding.contentEditText) {
-                groupCancel.visibility = View.INVISIBLE
-                setText("")
-                clearFocus()
-                Utils.hideKeyboard(this)
+            EDIT_POST_REQUEST_CODE -> {
+                if (resultCode != Activity.RESULT_OK) {
+                    return
+                }
+
+                data?.getStringExtra(Intent.EXTRA_TEXT)?.let {
+                    viewModel.changeContent(it)
+                    viewModel.save()
+                }
             }
         }
     }
