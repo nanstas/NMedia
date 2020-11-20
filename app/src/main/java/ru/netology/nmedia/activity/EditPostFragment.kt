@@ -33,14 +33,16 @@ class EditPostFragment : Fragment() {
             false
         )
 
-        arguments?.textArg?.let(binding.contentEditText::setText)
+        arguments?.textArg?.let {
+            binding.contentEditText.setText(it)
+        }
 
         binding.ok.setOnClickListener {
             val text = binding.contentEditText.text.toString()
             if (text.isNullOrBlank()) {
                 Snackbar.make(binding.root, R.string.error_empty_content, LENGTH_INDEFINITE).show()
             } else {
-                viewModel.changeContent(text)
+                viewModel.changeContent(text.trim())
                 viewModel.save()
                 Utils.hideKeyboard(requireView())
                 findNavController().navigateUp()
