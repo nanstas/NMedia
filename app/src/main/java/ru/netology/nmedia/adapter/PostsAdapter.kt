@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.card_post.view.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
@@ -19,6 +18,7 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onPlay(post: Post) {}
+    fun onOwnPost(post: Post) {}
 }
 
 class PostsAdapter(private val onInteractionListener: OnInteractionListener) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
@@ -46,6 +46,11 @@ class PostViewHolder(
             likeImageView.text = Utils.numToPostfix(post.countLikes)
             shareImageView.text = Utils.numToPostfix(post.countShares)
             playVideoView.isVisible = post.video != null
+            avatarImageView.setImageResource(R.drawable.ic_netology)
+
+            root.setOnClickListener {
+                onInteractionListener.onOwnPost(post)
+            }
 
             menuImageButton.setOnClickListener {
                 PopupMenu(it.context, it).apply {
