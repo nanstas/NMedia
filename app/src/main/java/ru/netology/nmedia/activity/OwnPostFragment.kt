@@ -39,6 +39,7 @@ class OwnPostFragment : Fragment() {
             container,
             false
         )
+
         val postId = arguments?.textArg?.toLong()
 
         if (postId != null) {
