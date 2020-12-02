@@ -35,8 +35,10 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         message.data[action]?.let {
-            when (Action.valueOf(it)) {
-                Action.LIKE -> handleLike(gson.fromJson(message.data[content], Like::class.java))
+            when (it) {
+                "LIKE" -> handleLike(gson.fromJson(message.data[content], Like::class.java))
+                "NEWPOST" -> handleNewPost(gson.fromJson(message.data[content], NewPost::class.java))
+                else -> handleOther()
             }
         }
     }
@@ -61,10 +63,42 @@ class FCMService : FirebaseMessagingService() {
         NotificationManagerCompat.from(this)
             .notify(Random.nextInt(100_000), notification)
     }
-}
 
-enum class Action {
-    LIKE,
+    private fun handleNewPost(content: NewPost) {
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(
+                getString(
+                    R.string.notification_post_published,
+                    content.userName
+                )
+            )
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(
+                    content.text
+                )
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        NotificationManagerCompat.from(this)
+            .notify(Random.nextInt(100_000), notification)
+    }
+
+    private fun handleOther() {
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(
+                getString(
+                    R.string.notification_other
+                )
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        NotificationManagerCompat.from(this)
+            .notify(Random.nextInt(100_000), notification)
+    }
 }
 
 data class Like(
@@ -72,4 +106,11 @@ data class Like(
     val userName: String,
     val postId: Long,
     val postAuthor: String,
+)
+
+data class NewPost(
+    val userId: Long,
+    val userName: String,
+    val postId: Long,
+    val text: String
 )

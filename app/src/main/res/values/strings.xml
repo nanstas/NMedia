@@ -14,6 +14,8 @@
     <string name="error_empty_content">Content can\'t be empty</string>
     <string name="play_video">Play video</string>
     <string name="notification_user_liked">User %1$s liked %2$s\'s post</string>
+    <string name="notification_other">Hi from Nmedia! Come in, we missed you!</string>
+    <string name="notification_post_published">User %1$s published new post</string>
     <string name="channel_remote_name">Server notifications</string>
     <string name="channel_remote_description">Notifications from remote server</string>
 </resources>
