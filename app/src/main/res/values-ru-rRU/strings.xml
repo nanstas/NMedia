@@ -11,4 +11,9 @@
     <string name="menu_edit">Редактировать</string>
     <string name="error_empty_content">Контент не может быть пустым</string>
     <string name="play_video">Воспроизвести видео</string>
+    <string name="notification_user_liked">%1$s поставил лайк посту %2$s</string>
+    <string name="notification_other">Привет от Nmedia! Заходи, мы соскучились!</string>
+    <string name="notification_post_published">Пользователь %1$s опубликовал новый пост</string>
+    <string name="channel_remote_name">Уведомления с сервера</string>
+    <string name="channel_remote_description">Уведомления с удалённого сервера</string>
 </resources>
