@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
-import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.model.Post
 import ru.netology.nmedia.utils.Utils
 
 interface OnInteractionListener {
@@ -43,8 +43,8 @@ class PostViewHolder(
             publishedTextView.text = post.published
             contentTextView.text = post.content
             likeImageView.isChecked = post.likedByMe
-            likeImageView.text = Utils.numToPostfix(post.countLikes)
-            shareImageView.text = Utils.numToPostfix(post.countShares)
+            likeImageView.text = Utils.numToPostfix(post.likes)
+            shareImageView.text = Utils.numToPostfix(post.shares)
             playVideoView.isVisible = post.video != null
             avatarImageView.setImageResource(R.drawable.ic_netology)
 
@@ -65,7 +65,6 @@ class PostViewHolder(
                                 onInteractionListener.onEdit(post)
                                 true
                             }
-
                             else -> false
                         }
                     }

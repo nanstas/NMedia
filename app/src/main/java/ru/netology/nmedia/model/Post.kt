@@ -1,4 +1,4 @@
-package ru.netology.nmedia.dto
+package ru.netology.nmedia.model
 
 data class Post(
     val id: Long,
@@ -6,7 +6,7 @@ data class Post(
     val content: String,
     val published: String,
     var likedByMe: Boolean = false,
-    var countLikes: Int = 0,
-    var countShares: Int = 0,
+    var likes: Int = 0,
+    var shares: Int = 0,
     val video: String? = null
 )
