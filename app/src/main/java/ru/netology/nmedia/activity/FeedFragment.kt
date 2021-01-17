@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.fragment_feed.*
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.EditPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.OnInteractionListener
@@ -78,6 +79,12 @@ class FeedFragment : Fragment() {
                 viewModel.getPost(post.id)
             }
         })
+        binding.apply {
+            swiperefresh.setOnRefreshListener {
+                viewModel.loadPosts()
+                swiperefresh.isRefreshing = false
+            }
+        }
 
         binding.listRecyclerView.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner, { state ->
