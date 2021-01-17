@@ -10,4 +10,11 @@ interface PostRepository {
     fun removeById(id: Long)
     fun shareById(id: Long)
     fun getPost(id: Long): Post
+
+    fun getAllAsync(callback: GetAllCallback)
+
+    interface GetAllCallback {
+        fun onSuccess(posts: List<Post>) {}
+        fun onError(e: Exception) {}
+    }
 }
