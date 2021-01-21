@@ -3,6 +3,7 @@ package ru.netology.nmedia.model
 data class Post(
     val id: Long,
     val author: String,
+    val authorAvatar: String,
     val content: String,
     val published: String,
     var likedByMe: Boolean = false,
