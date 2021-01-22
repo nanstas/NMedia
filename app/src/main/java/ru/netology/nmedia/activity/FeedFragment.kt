@@ -64,11 +64,6 @@ class FeedFragment : Fragment() {
                 startActivity(shareIntent)
             }
 
-            override fun onPlay(post: Post) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
-                startActivity(intent)
-            }
-
             override fun onOwnPost(post: Post) {
                 findNavController().navigate(R.id.action_feedFragment_to_ownPostFragment,
                     Bundle().apply {
