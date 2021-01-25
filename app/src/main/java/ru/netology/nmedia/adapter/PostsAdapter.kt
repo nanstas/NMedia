@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.model.Post
@@ -47,6 +48,14 @@ class PostViewHolder(
             shareImageView.text = Utils.numToPostfix(post.shares)
             playVideoView.isVisible = post.video != null
             avatarImageView.setImageResource(R.drawable.ic_netology)
+
+            val url = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+            Glide.with(avatarImageView)
+                .load(url)
+                .error(R.drawable.ic_baseline_person_24)
+                .circleCrop()
+                .timeout(10_000)
+                .into(avatarImageView)
 
             root.setOnClickListener {
                 onInteractionListener.onOwnPost(post)
