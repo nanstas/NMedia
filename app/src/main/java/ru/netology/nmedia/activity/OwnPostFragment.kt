@@ -44,7 +44,6 @@ class OwnPostFragment : Fragment() {
                     likeImageView.isChecked = post.likedByMe
                     likeImageView.text = Utils.numToPostfix(post.likes)
                     shareImageView.text = Utils.numToPostfix(post.shares)
-                    playVideoView.isVisible = post.video != null
                     avatarImageView.setImageResource(R.drawable.ic_netology)
 
                     menuImageButton.setOnClickListener {
