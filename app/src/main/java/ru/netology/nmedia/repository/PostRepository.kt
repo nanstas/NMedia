@@ -1,20 +1,19 @@
 package ru.netology.nmedia.repository
 
+import ru.netology.nmedia.model.ApiError
 import ru.netology.nmedia.model.Post
 
 interface PostRepository {
-    fun getAll(): List<Post>
-    fun likeById(id: Long)
-    fun unLikeById(id: Long)
-    fun save(post: Post)
-    fun removeById(id: Long)
+    fun getAllAsync(callback: Callback<List<Post>>)
+    fun save(post: Post, callback: Callback<Post>)
+    fun removeById(id: Long, callback: Callback<Unit>)
+    fun likeById(id: Long, callback: Callback<Post>)
+    fun dislikeById(id: Long, callback: Callback<Post>)
     fun shareById(id: Long)
     fun getPost(id: Long): Post
 
-    fun getAllAsync(callback: GetAllCallback)
-
-    interface GetAllCallback {
-        fun onSuccess(posts: List<Post>) {}
-        fun onError(e: Exception) {}
+    interface Callback<T> {
+        fun onSuccess(posts: T) {}
+        fun onError(e: ApiError) {}
     }
 }
