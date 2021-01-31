@@ -9,5 +9,5 @@ data class Post(
     var likedByMe: Boolean = false,
     var likes: Int = 0,
     var shares: Int = 0,
-    val video: String? = null
+    val attachment: Attachment?
 )

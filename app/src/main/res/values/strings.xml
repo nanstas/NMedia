@@ -24,4 +24,5 @@
     <string name="server_error">"Server error"</string>
     <string name="network_error">"Network error"</string>
     <string name="unknown_error">"Unknown error"</string>
+    <string name="attachment">Attachment</string>
 </resources>

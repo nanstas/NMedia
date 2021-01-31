@@ -1,9 +1,9 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +18,6 @@ interface OnInteractionListener {
     fun onShare(post: Post) {}
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
-    fun onPlay(post: Post) {}
     fun onOwnPost(post: Post) {}
 }
 
@@ -46,16 +45,27 @@ class PostViewHolder(
             likeImageView.isChecked = post.likedByMe
             likeImageView.text = Utils.numToPostfix(post.likes)
             shareImageView.text = Utils.numToPostfix(post.shares)
-            playVideoView.isVisible = post.video != null
-            avatarImageView.setImageResource(R.drawable.ic_netology)
 
             val url = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
-            Glide.with(avatarImageView)
-                .load(url)
-                .error(R.drawable.ic_baseline_person_24)
-                .circleCrop()
-                .timeout(10_000)
-                .into(avatarImageView)
+            val urlAttachment = "http://10.0.2.2:9999/images/${post.attachment?.url}"
+
+                Glide.with(avatarImageView)
+                    .load(url)
+                    .error(R.drawable.ic_baseline_person_24)
+                    .circleCrop()
+                    .timeout(30_000)
+                    .into(avatarImageView)
+
+            if (post.attachment != null) {
+                attachmentImageView.visibility = View.VISIBLE
+                Glide.with(attachmentImageView.context)
+                    .load(urlAttachment)
+                    .error(R.drawable.ic_baseline_person_24)
+                    .timeout(30_000)
+                    .into(attachmentImageView)
+            } else {
+                attachmentImageView.visibility = View.GONE
+            }
 
             root.setOnClickListener {
                 onInteractionListener.onOwnPost(post)
@@ -78,10 +88,6 @@ class PostViewHolder(
                         }
                     }
                 }.show()
-            }
-
-            playVideoView.setOnClickListener {
-                onInteractionListener.onPlay(post)
             }
 
             likeImageView.setOnClickListener {
