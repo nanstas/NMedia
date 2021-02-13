@@ -18,6 +18,7 @@ import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.model.Post
+import ru.netology.nmedia.model.getHumanReadableMessage
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
@@ -48,7 +49,12 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                if (!post.likedByMe) {
+                    viewModel.likeById(post.id)
+
+                } else {
+                    viewModel.disLikeById(post.id)
+                }
                 viewModel.loadPosts()
             }
 
@@ -83,7 +89,8 @@ class FeedFragment : Fragment() {
         viewModel.data.observe(viewLifecycleOwner, { state ->
             adapter.submitList(state.posts)
             binding.progress.isVisible = state.loading
-            binding.errorGroup.isVisible = state.error
+            binding.errorGroup.isVisible = state.errorVisible
+            binding.retryTitle.text = state.error.getHumanReadableMessage(resources)
             binding.emptyText.isVisible = state.empty
         })
 
