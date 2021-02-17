@@ -74,7 +74,6 @@ class OwnPostFragment : Fragment() {
                 }
             }
         }
-
         return binding.root
     }
 }
