@@ -15,11 +15,12 @@ import ru.netology.nmedia.utils.Utils
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
-    fun onShare(post: Post) {}
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
-    fun onPlay(post: Post) {}
     fun onOwnPost(post: Post) {}
+    fun onShare(post: Post) {}
+    fun onPlay(post: Post) {}
+
 }
 
 class PostsAdapter(private val onInteractionListener: OnInteractionListener) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
