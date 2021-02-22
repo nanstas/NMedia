@@ -9,7 +9,7 @@ import retrofit2.http.*
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.model.Post
 
-private const val BASE_URL = "${BuildConfig.BASE_URL}/api/slow/"
+private const val BASE_URL = "${BuildConfig.BASE_URL}/api/"
 
 private val logging = HttpLoggingInterceptor().apply {
     if (BuildConfig.DEBUG) {
@@ -19,7 +19,6 @@ private val logging = HttpLoggingInterceptor().apply {
 
 private val okhttp = OkHttpClient.Builder()
     .addInterceptor(logging)
-//    .addInterceptor(PostInterceptor())
     .build()
 
 private val retrofit = Retrofit.Builder()

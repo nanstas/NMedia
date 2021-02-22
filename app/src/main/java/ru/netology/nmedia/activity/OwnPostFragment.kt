@@ -78,6 +78,14 @@ class OwnPostFragment : Fragment() {
                             }
                         }.show()
                     }
+                    likeImageView.setOnClickListener {
+                        if (!post.likedByMe) {
+                            viewModel.likeById(post.id)
+                        } else {
+                            viewModel.disLikeById(post.id)
+                        }
+                        // проброс количества лайков из FeedFragment!?
+                    }
                 }
             }
         return binding.root
