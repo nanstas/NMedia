@@ -14,7 +14,7 @@ interface PostDao {
     fun getAll(): LiveData<List<PostEntity>>
 
     @Query("""SELECT * FROM PostEntity WHERE id = :id""")
-    suspend fun getPostById(id: Long): Post
+    suspend fun getPostById(id: Long): PostEntity
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
     suspend fun isEmpty(): Boolean

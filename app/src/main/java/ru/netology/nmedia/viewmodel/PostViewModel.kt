@@ -56,6 +56,16 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun refreshPosts() = viewModelScope.launch {
+        try {
+            _dataState.value = FeedModelState(refreshing = true)
+            repository.getAll()
+            _dataState.value = FeedModelState()
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
     fun save() {
         edited.value?.let {
             _postCreated.value = Unit

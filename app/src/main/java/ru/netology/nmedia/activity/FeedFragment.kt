@@ -102,7 +102,7 @@ class FeedFragment : Fragment() {
         })
 
         binding.retryButton.setOnClickListener {
-            viewModel.loadPosts()
+            viewModel.refreshPosts()
         }
 
         binding.fab.setOnClickListener { findNavController().navigate(R.id.action_feedFragment_to_editPostFragment) }
