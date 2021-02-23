@@ -25,4 +25,6 @@
     <string name="network_error">"Network error"</string>
     <string name="unknown_error">"Unknown error"</string>
     <string name="attachment">Attachment</string>
+    <string name="get_new_post">Get new post</string>
+    <string name="add_post">Add new post</string>
 </resources>

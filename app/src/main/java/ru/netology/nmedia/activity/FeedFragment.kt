@@ -21,6 +21,7 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private var countNewPost = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,6 +96,19 @@ class FeedFragment : Fragment() {
             adapter.submitList(state.posts)
             binding.emptyText.isVisible = state.empty
         })
+
+        viewModel.newerCount.observe(viewLifecycleOwner) { state ->
+            println(state)
+            if (state > countNewPost) {
+                binding.extendedFab.visibility = View.VISIBLE
+            }
+            binding.extendedFab.setOnClickListener {
+                viewModel.loadPosts()
+                binding.extendedFab.visibility = View.GONE
+                binding.listRecyclerView.smoothScrollToPosition(0)
+                countNewPost = 0
+            }
+        }
 
         binding.retryButton.setOnClickListener {
             viewModel.refreshPosts()
