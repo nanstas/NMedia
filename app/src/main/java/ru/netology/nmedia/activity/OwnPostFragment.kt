@@ -9,8 +9,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentOwnPostBinding
+import ru.netology.nmedia.model.Post
 import ru.netology.nmedia.utils.StringArg
 import ru.netology.nmedia.utils.Utils
 import ru.netology.nmedia.viewmodel.PostViewModel
@@ -33,10 +35,8 @@ class OwnPostFragment : Fragment() {
             false
         )
 
-        val postId = arguments?.textArg?.toLong()
-
-        if (postId != null) {
-            viewModel.getPost(postId).let { post ->
+        val post: Post = arguments?.get("post") as Post
+            post.let { post ->
                 binding.apply {
                     authorTextView.text = post.author
                     publishedTextView.text = post.published
@@ -45,6 +45,14 @@ class OwnPostFragment : Fragment() {
                     likeImageView.text = Utils.numToPostfix(post.likes)
                     shareImageView.text = Utils.numToPostfix(post.shares)
                     avatarImageView.setImageResource(R.drawable.ic_netology)
+
+                    val url = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+                    Glide.with(avatarImageView)
+                        .load(url)
+                        .error(R.drawable.ic_baseline_person_24)
+                        .circleCrop()
+                        .timeout(10_000)
+                        .into(avatarImageView)
 
                     menuImageButton.setOnClickListener {
                         PopupMenu(it.context, it).apply {
@@ -64,16 +72,21 @@ class OwnPostFragment : Fragment() {
                                             })
                                         true
                                     }
-
                                     else -> false
                                 }
                             }
                         }.show()
                     }
+                    likeImageView.setOnClickListener {
+                        if (!post.likedByMe) {
+                            viewModel.likeById(post.id)
+                        } else {
+                            viewModel.disLikeById(post.id)
+                        }
+                        // проброс количества лайков из FeedFragment!?
+                    }
                 }
             }
-        }
-
         return binding.root
     }
 }
