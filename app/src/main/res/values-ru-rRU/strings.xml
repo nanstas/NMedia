@@ -23,4 +23,6 @@
     <string name="network_error">"Ошибка сети"</string>
     <string name="unknown_error">"Неизвестная ошибка"</string>
     <string name="attachment">Вложение</string>
+    <string name="get_new_post">Загрузить новый пост</string>
+    <string name="add_post">Добавить новый пост</string>
 </resources>
