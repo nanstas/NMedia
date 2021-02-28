@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
-import ru.netology.nmedia.model.Post
+import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.utils.Utils
 import ru.netology.nmedia.view.loadCircleCrop
 

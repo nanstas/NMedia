@@ -1,57 +1,174 @@
+//package ru.netology.nmedia.activity
+//
+//import android.os.Bundle
+//import android.view.LayoutInflater
+//import android.view.View
+//import android.view.ViewGroup
+//import androidx.fragment.app.Fragment
+//import androidx.fragment.app.viewModels
+//import androidx.navigation.fragment.findNavController
+//import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
+//import com.google.android.material.snackbar.Snackbar
+//import ru.netology.nmedia.R
+//import ru.netology.nmedia.databinding.FragmentEditPostBinding
+//import ru.netology.nmedia.utils.StringArg
+//import ru.netology.nmedia.utils.Utils
+//import ru.netology.nmedia.viewmodel.PostViewModel
+
+//class EditPostFragment : Fragment() {
+//    companion object {
+//        var Bundle.textArg: String? by StringArg
+//    }
+//
+//    private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+//
+//    override fun onCreateView(
+//        inflater: LayoutInflater,
+//        container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        val binding = FragmentEditPostBinding.inflate(
+//            inflater,
+//            container,
+//            false
+//        )
+//
+//        arguments?.textArg?.let {
+//            binding.contentEditText.setText(it)
+//        }
+//
+//        binding.ok.setOnClickListener {
+//            val text = binding.contentEditText.text.toString()
+//            if (text.isNullOrBlank()) {
+//                Snackbar.make(binding.root, R.string.error_empty_content, LENGTH_INDEFINITE).show()
+//            } else {
+//                viewModel.changeContent(text.trim())
+//                viewModel.save()
+//                Utils.hideKeyboard(requireView())
+//                findNavController().navigateUp()
+//            }
+//        }
+//
+//        binding.cancel.setOnClickListener {
+//            Utils.hideKeyboard(requireView())
+//            findNavController().navigateUp()
+//        }
+//
+//        viewModel.postCreated.observe(viewLifecycleOwner) {
+//            viewModel.loadPosts()
+//            findNavController().navigateUp()
+//        }
+//
+//        return binding.root
+//    }
+//}
+
 package ru.netology.nmedia.activity
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentEditPostBinding
-import ru.netology.nmedia.utils.StringArg
 import ru.netology.nmedia.utils.Utils
+import ru.netology.nmedia.utils.StringArg
 import ru.netology.nmedia.viewmodel.PostViewModel
+import java.io.File
 
 class EditPostFragment : Fragment() {
+    private val photoRequestCode = 1
+    private val cameraRequestCode = 2
+
     companion object {
         var Bundle.textArg: String? by StringArg
     }
 
-    private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val viewModel: PostViewModel by viewModels(
+        ownerProducer = ::requireParentFragment
+    )
+
+    private var fragmentBinding: FragmentEditPostBinding? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_edit_post, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save -> {
+                fragmentBinding?.let {
+                    viewModel.changeContent(it.contentEditText.text.toString())
+                    viewModel.save()
+                    Utils.hideKeyboard(requireView())
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentEditPostBinding.inflate(
             inflater,
             container,
             false
         )
+        fragmentBinding = binding
 
-        arguments?.textArg?.let {
-            binding.contentEditText.setText(it)
+        arguments?.textArg
+            ?.let(binding.contentEditText::setText)
+
+        binding.contentEditText.requestFocus()
+
+        binding.pickPhoto.setOnClickListener {
+            ImagePicker.with(this)
+                .crop()
+                .compress(2048)
+                .galleryOnly()
+                .galleryMimeTypes(arrayOf(
+                    "image/png",
+                    "image/jpeg",
+                ))
+                .start(photoRequestCode)
         }
 
-        binding.ok.setOnClickListener {
-            val text = binding.contentEditText.text.toString()
-            if (text.isNullOrBlank()) {
-                Snackbar.make(binding.root, R.string.error_empty_content, LENGTH_INDEFINITE).show()
-            } else {
-                viewModel.changeContent(text.trim())
-                viewModel.save()
-                Utils.hideKeyboard(requireView())
-                findNavController().navigateUp()
+        binding.takePhoto.setOnClickListener {
+            ImagePicker.with(this)
+                .crop()
+                .compress(2048)
+                .cameraOnly()
+                .start(cameraRequestCode)
+        }
+
+        binding.removePhoto.setOnClickListener {
+            viewModel.changePhoto(null, null)
+        }
+
+        viewModel.photo.observe(viewLifecycleOwner) {
+            if (it.uri == null) {
+                binding.photoContainer.visibility = View.GONE
+                return@observe
             }
-        }
 
-        binding.cancel.setOnClickListener {
-            Utils.hideKeyboard(requireView())
-            findNavController().navigateUp()
+            binding.photoContainer.visibility = View.VISIBLE
+            binding.photo.setImageURI(it.uri)
         }
 
         viewModel.postCreated.observe(viewLifecycleOwner) {
@@ -60,5 +177,32 @@ class EditPostFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == ImagePicker.RESULT_ERROR) {
+            fragmentBinding?.let {
+                Snackbar.make(it.root, ImagePicker.getError(data), Snackbar.LENGTH_LONG).show()
+            }
+            return
+        }
+        if (resultCode == Activity.RESULT_OK && requestCode == photoRequestCode) {
+            val uri: Uri? = data?.data
+            val file: File? = ImagePicker.getFile(data)
+            viewModel.changePhoto(uri, file)
+            return
+        }
+        if (resultCode == Activity.RESULT_OK && requestCode == cameraRequestCode) {
+            val uri: Uri? = data?.data
+            val file: File? = ImagePicker.getFile(data)
+            viewModel.changePhoto(uri, file)
+            return
+        }
+    }
+
+    override fun onDestroyView() {
+        fragmentBinding = null
+        super.onDestroyView()
     }
 }

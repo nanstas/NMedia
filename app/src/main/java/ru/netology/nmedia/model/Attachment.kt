@@ -1,11 +1,11 @@
-package ru.netology.nmedia.model
-
-data class Attachment(
-    val url: String,
-    val description: String,
-    val type: AttachmentType
-)
-
-enum class AttachmentType {
-    IMAGE
-}
+//package ru.netology.nmedia.model
+//
+//data class Attachment(
+//    val url: String,
+//    val description: String,
+//    val type: AttachmentType
+//)
+//
+//enum class AttachmentType {
+//    IMAGE
+//}
