@@ -73,6 +73,13 @@ class FeedFragment : Fragment() {
                         putParcelable("post", post)
                     })
             }
+
+            override fun onPhoto(post: Post) {
+                findNavController().navigate(R.id.action_feedFragment_to_photoFragment,
+                    Bundle().apply {
+                        putParcelable("post", post)
+                    })
+            }
         })
         binding.apply {
             swiperefresh.setOnRefreshListener {
@@ -91,10 +98,17 @@ class FeedFragment : Fragment() {
                     .show()
             }
         })
+
         viewModel.data.observe(viewLifecycleOwner, { state ->
             adapter.submitList(state.posts)
             binding.emptyText.isVisible = state.empty
         })
+
+        viewModel.newerCount.observe(viewLifecycleOwner) { state ->
+            // TODO: just log it, interaction must be in homework
+
+            println(state)
+        }
 
         viewModel.newerCount.observe(viewLifecycleOwner) { state ->
             println(state)

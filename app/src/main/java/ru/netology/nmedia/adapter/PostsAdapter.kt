@@ -1,11 +1,13 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
@@ -18,6 +20,7 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onOwnPost(post: Post) {}
+    fun onPhoto(post: Post) {}
     fun onShare(post: Post) {}
     fun onPlay(post: Post) {}
 
@@ -41,24 +44,31 @@ class PostViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         binding.apply {
+            val urlAvatar = "${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}"
+            val urlAttachment = "${BuildConfig.BASE_URL}/media/${post.attachment?.url}"
+
             authorTextView.text = post.author
             publishedTextView.text = post.published
             contentTextView.text = post.content
             likeImageView.isChecked = post.likedByMe
             likeImageView.text = Utils.numToPostfix(post.likes)
             shareImageView.text = Utils.numToPostfix(post.shares)
-            avatarImageView.loadCircleCrop("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
+            avatarImageView.loadCircleCrop(urlAvatar)
 
-//            if (post.attachment != null) {
-//                attachmentImageView.visibility = View.VISIBLE
-//                Glide.with(attachmentImageView.context)
-//                    .load(urlAttachment)
-//                    .error(R.drawable.ic_baseline_person_24)
-//                    .timeout(30_000)
-//                    .into(attachmentImageView)
-//            } else {
-//                attachmentImageView.visibility = View.GONE
-//            }
+            if (post.attachment != null) {
+                attachmentView.visibility = View.VISIBLE
+                Glide.with(attachmentView.context)
+                    .load(urlAttachment)
+                    .error(R.drawable.ic_baseline_person_24)
+                    .timeout(30_000)
+                    .into(attachmentView)
+            } else {
+                attachmentView.visibility = View.GONE
+            }
+
+            attachmentView.setOnClickListener {
+                onInteractionListener.onPhoto(post)
+            }
 
             root.setOnClickListener {
                 onInteractionListener.onOwnPost(post)

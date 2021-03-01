@@ -15,4 +15,5 @@ interface PostRepository {
     suspend fun shareById(id: Long)
     fun getNewerCount(id: Long): Flow<Int>
     suspend fun upload(upload: MediaUpload): Media
+    suspend fun saveWithAttachment(post: Post, upload: MediaUpload)
 }
