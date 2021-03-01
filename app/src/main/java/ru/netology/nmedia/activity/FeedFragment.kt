@@ -105,12 +105,6 @@ class FeedFragment : Fragment() {
         })
 
         viewModel.newerCount.observe(viewLifecycleOwner) { state ->
-            // TODO: just log it, interaction must be in homework
-
-            println(state)
-        }
-
-        viewModel.newerCount.observe(viewLifecycleOwner) { state ->
             println(state)
             if (state > countNewPost) {
                 binding.extendedFab.visibility = View.VISIBLE

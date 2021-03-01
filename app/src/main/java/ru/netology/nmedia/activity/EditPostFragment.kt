@@ -26,9 +26,7 @@ class EditPostFragment : Fragment() {
         var Bundle.textArg: String? by StringArg
     }
 
-    private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
     private var fragmentBinding: FragmentEditPostBinding? = null
 
