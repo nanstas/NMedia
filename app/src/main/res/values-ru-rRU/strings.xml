@@ -25,4 +25,8 @@
     <string name="attachment">Вложение</string>
     <string name="get_new_post">Загрузить новый пост</string>
     <string name="add_post">Добавить новый пост</string>
+    <string name="description_select_photo">Выбрать фото</string>
+    <string name="description_take_photo">Сделать фото</string>
+    <string name="description_photo">Фото</string>
+    <string name="remove">Удалить</string>
 </resources>

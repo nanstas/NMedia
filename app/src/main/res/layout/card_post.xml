@@ -72,11 +72,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier"
-        app:layout_constraintBottom_toTopOf="@id/attachmentImageView"
+        app:layout_constraintBottom_toTopOf="@id/attachment_view"
         tools:text="@sample/posts.json/data/content" />
 
     <ImageView
-        android:id="@+id/attachmentImageView"
+        android:id="@+id/attachment_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/barrier2"

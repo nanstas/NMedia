@@ -1,7 +1,6 @@
 package ru.netology.nmedia.activity
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,7 @@ import ru.netology.nmedia.activity.EditPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
-import ru.netology.nmedia.model.Post
+import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
@@ -74,6 +73,13 @@ class FeedFragment : Fragment() {
                         putParcelable("post", post)
                     })
             }
+
+            override fun onPhoto(post: Post) {
+                findNavController().navigate(R.id.action_feedFragment_to_photoFragment,
+                    Bundle().apply {
+                        putParcelable("post", post)
+                    })
+            }
         })
         binding.apply {
             swiperefresh.setOnRefreshListener {
@@ -92,6 +98,7 @@ class FeedFragment : Fragment() {
                     .show()
             }
         })
+
         viewModel.data.observe(viewLifecycleOwner, { state ->
             adapter.submitList(state.posts)
             binding.emptyText.isVisible = state.empty

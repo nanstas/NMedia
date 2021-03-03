@@ -27,4 +27,8 @@
     <string name="attachment">Attachment</string>
     <string name="get_new_post">Get new post</string>
     <string name="add_post">Add new post</string>
+    <string name="description_select_photo">Select photo</string>
+    <string name="description_take_photo">Take photo</string>
+    <string name="description_photo">Photo</string>
+    <string name="remove">Remove</string>
 </resources>
