@@ -16,4 +16,5 @@ interface PostRepository {
     fun getNewerCount(id: Long): Flow<Int>
     suspend fun upload(upload: MediaUpload): Media
     suspend fun saveWithAttachment(post: Post, upload: MediaUpload)
+    suspend fun authentication(login: String, password: String)
 }

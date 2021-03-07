@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.Attachment
 import ru.netology.nmedia.dto.Media
@@ -148,6 +149,25 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             // TODO: add support for other types
             val postWithAttachment = post.copy(attachment = Attachment(media.id, AttachmentType.IMAGE))
             save(postWithAttachment)
+        } catch (e: AppError) {
+            throw e
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun authentication(login: String, password: String) {
+        try {
+            val response = PostsApi.retrofitService.updateUser(login, password)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            val authState = response.body()
+            if (authState != null) {
+                authState.token?.let { AppAuth.getInstance().setAuth(authState.id, it) }
+            }
         } catch (e: AppError) {
             throw e
         } catch (e: IOException) {
