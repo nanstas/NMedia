@@ -35,8 +35,7 @@ class AuthFragment : Fragment() {
         binding.enterBtnView.setOnClickListener {
             val login = binding.loginView.text.trim().toString()
             val password = binding.passwordView.text.trim().toString()
-//            binding.passwordView.text = login
-                viewModel.authentication(login, password)
+            viewModel.authentication(login, password)
             Utils.hideKeyboard(it)
             findNavController().navigateUp()
         }

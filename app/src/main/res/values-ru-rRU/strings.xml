@@ -33,4 +33,5 @@
     <string name="sign_in">Вход</string>
     <string name="sign_up">Регистрация</string>
     <string name="sign_out">Выход</string>
+    <string name="hello_blank_fragment">Привет пустой фрагмент</string>
 </resources>
