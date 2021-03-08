@@ -66,17 +66,13 @@ class PostViewHolder(
                 attachmentView.visibility = View.GONE
             }
 
-            attachmentView.setOnClickListener {
-                onInteractionListener.onPhoto(post)
-            }
-
-            root.setOnClickListener {
-                onInteractionListener.onOwnPost(post)
-            }
+            menuImageButton.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
 
             menuImageButton.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
+                    // TODO: if we don't have other options, just remove dots
+                    menu.setGroupVisible(R.id.owned, post.ownedByMe)
                     setOnMenuItemClickListener { item ->
                         when (item.itemId) {
                             R.id.remove -> {
@@ -91,6 +87,14 @@ class PostViewHolder(
                         }
                     }
                 }.show()
+            }
+
+            attachmentView.setOnClickListener {
+                onInteractionListener.onPhoto(post)
+            }
+
+            root.setOnClickListener {
+                onInteractionListener.onOwnPost(post)
             }
 
             likeImageView.setOnClickListener {

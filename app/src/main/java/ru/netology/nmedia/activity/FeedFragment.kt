@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
@@ -16,10 +17,12 @@ import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val viewModelAuth: AuthViewModel by viewModels(ownerProducer = ::requireParentFragment)
     private var countNewPost = 0
 
     override fun onCreateView(
@@ -47,6 +50,10 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
+                if (!viewModelAuth.authenticated) {
+                    findNavController().navigate(R.id.action_feedFragment_to_authFragment)
+                    return
+                }
                 if (!post.likedByMe) {
                     viewModel.likeById(post.id)
 
@@ -121,7 +128,13 @@ class FeedFragment : Fragment() {
             viewModel.refreshPosts()
         }
 
-        binding.fab.setOnClickListener { findNavController().navigate(R.id.action_feedFragment_to_editPostFragment) }
+        binding.fab.setOnClickListener {
+            if (!viewModelAuth.authenticated) {
+                findNavController().navigate(R.id.action_feedFragment_to_authFragment)
+                return@setOnClickListener
+            }
+            findNavController().navigate(R.id.action_feedFragment_to_editPostFragment)
+        }
 
         return binding.root
     }
