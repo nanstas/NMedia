@@ -12,6 +12,7 @@ import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.auth.AuthState
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.PushToken
 
 private const val BASE_URL = "${BuildConfig.BASE_URL}/api/"
 
@@ -41,6 +42,9 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface PostsApiService {
+    @POST("users/push-tokens")
+    suspend fun save(@Body pushToken: PushToken): Response<Unit>
+
     @GET("posts")
     suspend fun getAll(): Response<List<Post>>
 
@@ -71,7 +75,7 @@ interface PostsApiService {
     suspend fun updateUser(@Field("login") login: String, @Field("pass") pass: String): Response<AuthState>
 }
 
-object PostsApi {
+object Api {
     val retrofitService: PostsApiService by lazy {
         retrofit.create(PostsApiService::class.java)
     }
