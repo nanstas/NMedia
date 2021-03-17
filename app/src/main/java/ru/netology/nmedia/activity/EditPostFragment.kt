@@ -5,16 +5,16 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentEditPostBinding
-import ru.netology.nmedia.utils.Utils
 import ru.netology.nmedia.utils.StringArg
+import ru.netology.nmedia.utils.Utils
 import ru.netology.nmedia.viewmodel.PostViewModel
 import java.io.File
 
@@ -26,6 +26,7 @@ class EditPostFragment : Fragment() {
         var Bundle.textArg: String? by StringArg
     }
 
+    @ExperimentalCoroutinesApi
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
     private var fragmentBinding: FragmentEditPostBinding? = null
@@ -39,6 +40,7 @@ class EditPostFragment : Fragment() {
         inflater.inflate(R.menu.menu_edit_post, menu)
     }
 
+    @ExperimentalCoroutinesApi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save -> {
@@ -53,6 +55,7 @@ class EditPostFragment : Fragment() {
         }
     }
 
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -112,6 +115,7 @@ class EditPostFragment : Fragment() {
         return binding.root
     }
 
+    @ExperimentalCoroutinesApi
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == ImagePicker.RESULT_ERROR) {

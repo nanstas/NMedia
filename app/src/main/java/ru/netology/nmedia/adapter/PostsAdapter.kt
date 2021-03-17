@@ -48,7 +48,7 @@ class PostViewHolder(
             val urlAttachment = "${BuildConfig.BASE_URL}/media/${post.attachment?.url}"
 
             authorTextView.text = post.author
-            publishedTextView.text = post.published
+            publishedTextView.text = post.published.toString()
             contentTextView.text = post.content
             likeImageView.isChecked = post.likedByMe
             likeImageView.text = Utils.numToPostfix(post.likes)
