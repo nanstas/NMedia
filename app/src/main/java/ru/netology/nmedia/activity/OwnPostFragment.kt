@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentOwnPostBinding
 import ru.netology.nmedia.dto.Post
@@ -21,13 +22,15 @@ class OwnPostFragment : Fragment() {
         var Bundle.textArg: String? by StringArg
     }
 
+    @ExperimentalCoroutinesApi
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         val binding = FragmentOwnPostBinding.inflate(
             inflater,
             container,
@@ -35,10 +38,10 @@ class OwnPostFragment : Fragment() {
         )
 
         val post: Post = arguments?.get("post") as Post
-            post.let { post ->
+            post.let {
                 binding.apply {
                     authorTextView.text = post.author
-                    publishedTextView.text = post.published
+                    publishedTextView.text = post.published.toString()
                     contentTextView.text = post.content
                     likeImageView.isChecked = post.likedByMe
                     likeImageView.text = Utils.numToPostfix(post.likes)

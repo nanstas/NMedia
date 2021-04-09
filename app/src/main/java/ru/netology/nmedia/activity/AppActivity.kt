@@ -7,12 +7,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainer
-import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.onNavDestinationSelected
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.iid.FirebaseInstanceId
@@ -63,14 +58,11 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.signin -> {
-//                 TODO: just hardcode it, implementation must be in homework
-//                AppAuth.getInstance().setAuth(5, "x-token")
                 findNavController(R.id.nav_host_fragment).navigate(R.id.action_feedFragment_to_authFragment)
                 true
             }
             R.id.signup -> {
                 // TODO: just hardcode it, implementation must be in homework
-//                AppAuth.getInstance().setAuth(2, "x-token")
                 true
             }
             R.id.signout -> {
