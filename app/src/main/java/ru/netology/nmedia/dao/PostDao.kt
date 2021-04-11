@@ -38,10 +38,3 @@ interface PostDao {
     @Query("SELECT COUNT(*) FROM PostEntity")
     suspend fun count(): Int
 }
-
-class Converters {
-    @TypeConverter
-    fun toAttachmentType(value: String) = enumValueOf<AttachmentType>(value)
-    @TypeConverter
-    fun fromAttachmentType(value: AttachmentType) = value.name
-}

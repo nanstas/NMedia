@@ -8,7 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import ru.netology.nmedia.api.Api
+import ru.netology.nmedia.api.ApiService
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dao.PostWorkerDao
@@ -26,17 +26,24 @@ import ru.netology.nmedia.entity.PostWorkEntity
 import ru.netology.nmedia.enumeration.AttachmentType
 import ru.netology.nmedia.error.UnknownError
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class PostRepositoryImpl(private val postDao: PostDao, private val postWorkerDao: PostWorkerDao) :
-    PostRepository {
+@Singleton
+class PostRepositoryImpl @Inject constructor(
+    private val postDao: PostDao,
+    private val postWorkerDao: PostWorkerDao,
+    private val apiService: ApiService,
+    private val auth: AppAuth,
+) : PostRepository {
     override val data = postDao.getAll()
         .map(List<PostEntity>::toDto)
         .flowOn(Dispatchers.Default)
 
     override suspend fun getAll() {
         try {
-            val response = Api.retrofitService.getAll()
+            val response = apiService.getAll()
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -52,7 +59,7 @@ class PostRepositoryImpl(private val postDao: PostDao, private val postWorkerDao
 
     override suspend fun save(post: Post) {
         try {
-            val response = Api.retrofitService.save(post)
+            val response = apiService.save(post)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -68,7 +75,7 @@ class PostRepositoryImpl(private val postDao: PostDao, private val postWorkerDao
 
     override suspend fun removeById(id: Long) {
         try {
-            val response = Api.retrofitService.removeById(id)
+            val response = apiService.removeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -83,7 +90,7 @@ class PostRepositoryImpl(private val postDao: PostDao, private val postWorkerDao
     override suspend fun likeById(id: Long) {
         postDao.likeById(id)
         try {
-            val response = Api.retrofitService.likeById(id)
+            val response = apiService.likeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -98,7 +105,7 @@ class PostRepositoryImpl(private val postDao: PostDao, private val postWorkerDao
     override suspend fun dislikeById(id: Long) {
         postDao.likeById(id)
         try {
-            val response = Api.retrofitService.dislikeById(id)
+            val response = apiService.dislikeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -117,7 +124,7 @@ class PostRepositoryImpl(private val postDao: PostDao, private val postWorkerDao
     override fun getNewerCount(id: Long): Flow<Int> = flow {
         while (true) {
             delay(10_000L)
-            val response = Api.retrofitService.getNewer(id)
+            val response = apiService.getNewer(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -136,7 +143,7 @@ class PostRepositoryImpl(private val postDao: PostDao, private val postWorkerDao
                 "file", upload.file.name, upload.file.asRequestBody()
             )
 
-            val response = Api.retrofitService.upload(media)
+            val response = apiService.upload(media)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -167,13 +174,13 @@ class PostRepositoryImpl(private val postDao: PostDao, private val postWorkerDao
 
     override suspend fun authentication(login: String, password: String) {
         try {
-            val response = Api.retrofitService.updateUser(login, password)
+            val response = apiService.updateUser(login, password)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
             val authState = response.body()
             if (authState != null) {
-                authState.token?.let { AppAuth.getInstance().setAuth(authState.id, it) }
+                authState.token?.let { auth.setAuth(authState.id, it) }
             }
         } catch (e: AppError) {
             throw e

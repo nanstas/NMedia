@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 30
@@ -69,6 +70,9 @@ dependencies {
     def coroutines_version = "1.4.2"
     def imagepicker_version = "1.8"
     def workmanager_version = "2.5.0"
+    def hilt_viewmodel_version = "1.0.0-alpha03"
+    def hilt_compiler_version = "1.0.0-beta01"
+    def hilt_work_version = "1.0.0-beta01"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -99,7 +103,11 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"
     implementation "com.github.dhaval2404:imagepicker:$imagepicker_version"
     implementation "androidx.work:work-runtime-ktx:$workmanager_version"
-
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodel_version"
+    implementation "androidx.hilt:hilt-work:$hilt_work_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_compiler_version"
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
