@@ -12,7 +12,6 @@ import ru.netology.nmedia.auth.AppAuth
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
-import ru.netology.nmedia.auth.AuthState
 import javax.inject.Inject
 import kotlin.random.Random
 

@@ -1,4 +1,4 @@
-package ru.netology.nmedia.activity;
+package ru.netology.nmedia.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -22,6 +22,11 @@ import javax.inject.Inject
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
     @Inject
     lateinit var auth: AppAuth
+    @Inject
+    lateinit var googleApiAvailability: GoogleApiAvailability
+    @Inject
+    lateinit var firebaseMessaging: FirebaseInstanceId
+    
     private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +84,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     }
 
     private fun checkGoogleApiAvailability() {
-        with(GoogleApiAvailability.getInstance()) {
+        with(googleApiAvailability) {
             val code = isGooglePlayServicesAvailable(this@AppActivity)
             if (code == ConnectionResult.SUCCESS) {
                 return@with
@@ -92,7 +97,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 .show()
         }
 
-        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+        firebaseMessaging.instanceId.addOnSuccessListener {
             println(it.token)
         }
     }

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentOwnPostBinding
@@ -17,6 +18,7 @@ import ru.netology.nmedia.utils.StringArg
 import ru.netology.nmedia.utils.Utils
 import ru.netology.nmedia.viewmodel.PostViewModel
 
+@AndroidEntryPoint
 class OwnPostFragment : Fragment() {
     companion object {
         var Bundle.textArg: String? by StringArg
