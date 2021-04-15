@@ -47,7 +47,12 @@ class EditPostFragment : Fragment() {
         return when (item.itemId) {
             R.id.save -> {
                 fragmentBinding?.let {
-                    viewModel.changeContent(it.contentEditText.text.toString())
+                    val id = arguments?.getLong("postId") ?: 0L
+                    if (id != 0L) {
+                        viewModel.changeContent(id, it.contentEditText.text.toString(), false)
+                    } else {
+                        viewModel.changeContent(0, it.contentEditText.text.toString(), true)
+                    }
                     viewModel.save()
                     Utils.hideKeyboard(requireView())
                 }
@@ -61,7 +66,7 @@ class EditPostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val binding = FragmentEditPostBinding.inflate(
             inflater,
@@ -70,8 +75,10 @@ class EditPostFragment : Fragment() {
         )
         fragmentBinding = binding
 
-        arguments?.textArg
-            ?.let(binding.contentEditText::setText)
+
+        val content = arguments?.getString("content") ?: ""
+
+        binding.contentEditText.setText(content)
 
         binding.contentEditText.requestFocus()
 

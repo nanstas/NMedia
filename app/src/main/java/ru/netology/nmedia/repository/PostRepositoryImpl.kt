@@ -1,4 +1,4 @@
-package ru.netology.nmedia.repository
+ package ru.netology.nmedia.repository
 
 import android.net.Uri
 import androidx.core.net.toFile
@@ -29,7 +29,6 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class PostRepositoryImpl @Inject constructor(
     private val postDao: PostDao,
@@ -47,7 +46,6 @@ class PostRepositoryImpl @Inject constructor(
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             postDao.insert(body.toEntity())
         } catch (e: IOException) {
@@ -63,7 +61,6 @@ class PostRepositoryImpl @Inject constructor(
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             postDao.insert(PostEntity.fromDto(body))
         } catch (e: IOException) {
@@ -142,12 +139,10 @@ class PostRepositoryImpl @Inject constructor(
             val media = MultipartBody.Part.createFormData(
                 "file", upload.file.name, upload.file.asRequestBody()
             )
-
             val response = apiService.upload(media)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-
             return response.body() ?: throw ApiError(response.code(), response.message())
         } catch (e: IOException) {
             throw NetworkError
@@ -206,14 +201,27 @@ class PostRepositoryImpl @Inject constructor(
 
     override suspend fun processWork(id: Long) {
         try {
-            val postWorkerEntity = postWorkerDao.getById(id)
-            if (postWorkerEntity.uri != null) {
-                val upload = MediaUpload(Uri.parse(postWorkerEntity.uri).toFile())
-                saveWithAttachment(postWorkerEntity.toDto(), upload)
+            val entity = postWorkerDao.getById(id)
+            val postFromWorkerEntity = entity.toDto()
+            val postToCreate = if (postFromWorkerEntity.newPost) {
+                postFromWorkerEntity.copy(id = 0L)
             } else {
-                save(postWorkerEntity.toDto())
+                postFromWorkerEntity
             }
-            postWorkerDao.removeById(postWorkerEntity.toDto().id)
+
+            if (entity.uri != null) {
+                val upload = MediaUpload(Uri.parse(entity.uri).toFile())
+                val media = upload(upload)
+                val postWithAttachment =
+                    postToCreate.copy(attachment = Attachment(media.id, AttachmentType.IMAGE))
+                save(postWithAttachment)
+            } else {
+                save(postToCreate)
+            }
+            postWorkerDao.removeById(postFromWorkerEntity.id)
+
+        } catch (e: IOException) {
+            throw NetworkError
         } catch (e: Exception) {
             throw UnknownError
         }

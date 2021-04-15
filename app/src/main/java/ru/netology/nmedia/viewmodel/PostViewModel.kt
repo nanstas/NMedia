@@ -25,7 +25,7 @@ import java.io.File
 import javax.inject.Inject
 
 private val empty = Post(
-    id = 0,
+    id = 0L,
     content = "",
     authorId = 0,
     author = "",
@@ -134,12 +134,18 @@ class PostViewModel @Inject constructor(
         edited.value = post
     }
 
-    fun changeContent(content: String) {
+    fun changeContent(postId: Long, content: String, newPost: Boolean) {
         val text = content.trim()
         if (edited.value?.content == text) {
             return
         }
-        edited.value = edited.value?.copy(content = text)
+        edited.value =
+            edited.value?.copy(
+                id = postId,
+                content = text,
+                ownedByMe = true,
+                newPost = newPost
+            )
     }
 
 

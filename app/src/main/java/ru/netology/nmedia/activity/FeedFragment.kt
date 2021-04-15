@@ -42,10 +42,11 @@ class FeedFragment : Fragment() {
 
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
-                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment,
-                    Bundle().apply {
-                        textArg = post.content
-                    })
+                val bundle = Bundle().apply {
+                    putString("content", post.content)
+                    putLong("postId", post.id)
+                }
+                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment, bundle)
                 viewModel.edit(post)
             }
 
