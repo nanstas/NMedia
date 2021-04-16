@@ -1,10 +1,10 @@
 package ru.netology.nmedia.viewmodel
 
-import android.app.Application
 import android.net.Uri
 import androidx.core.net.toFile
 import androidx.lifecycle.*
 import androidx.work.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
-import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
@@ -23,9 +22,10 @@ import ru.netology.nmedia.utils.SingleLiveEvent
 import ru.netology.nmedia.work.RemovePostWorker
 import ru.netology.nmedia.work.SavePostWorker
 import java.io.File
+import javax.inject.Inject
 
 private val empty = Post(
-    id = 0,
+    id = 0L,
     content = "",
     authorId = 0,
     author = "",
@@ -37,18 +37,14 @@ private val empty = Post(
 
 private val noPhoto = PhotoModel()
 
-@ExperimentalCoroutinesApi
-class PostViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: PostRepository = PostRepositoryImpl(
-        AppDb.getInstance(context = application).postDao(),
-        AppDb.getInstance(context = application).postWorkerDao()
-    )
-
-    private val workManager: WorkManager =
-        WorkManager.getInstance(application)
-
-    val data: LiveData<FeedModel> = AppAuth.getInstance()
-        .authStateFlow
+@OptIn(ExperimentalCoroutinesApi::class)
+@HiltViewModel
+class PostViewModel @Inject constructor(
+    private val repository: PostRepository,
+    private val workManager: WorkManager,
+    auth: AppAuth,
+) : ViewModel() {
+    val data: LiveData<FeedModel> = auth.authStateFlow
         .flatMapLatest { (myId, _) ->
             repository.data
                 .map { posts ->
@@ -138,12 +134,18 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = post
     }
 
-    fun changeContent(content: String) {
+    fun changeContent(postId: Long, content: String, newPost: Boolean) {
         val text = content.trim()
         if (edited.value?.content == text) {
             return
         }
-        edited.value = edited.value?.copy(content = text)
+        edited.value =
+            edited.value?.copy(
+                id = postId,
+                content = text,
+                ownedByMe = true,
+                newPost = newPost
+            )
     }
 
 

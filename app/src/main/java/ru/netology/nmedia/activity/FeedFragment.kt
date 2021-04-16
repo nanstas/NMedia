@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.EditPostFragment.Companion.textArg
@@ -20,6 +21,7 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
     @ExperimentalCoroutinesApi
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
@@ -40,10 +42,11 @@ class FeedFragment : Fragment() {
 
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
-                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment,
-                    Bundle().apply {
-                        textArg = post.content
-                    })
+                val bundle = Bundle().apply {
+                    putString("content", post.content)
+                    putLong("postId", post.id)
+                }
+                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment, bundle)
                 viewModel.edit(post)
             }
 

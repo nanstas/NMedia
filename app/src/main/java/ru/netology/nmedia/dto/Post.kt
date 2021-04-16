@@ -16,8 +16,9 @@ data class Post(
     var likes: Int = 0,
     var shares: Int = 0,
     val video: String? = null,
-    val attachment: @RawValue Attachment? = null,
     val ownedByMe: Boolean = false,
+    val newPost: Boolean = false,
+    val attachment: @RawValue Attachment? = null,
 ) : Parcelable
 
 data class Attachment(

@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.databinding.FragmentAuthBinding
 import ru.netology.nmedia.utils.Utils
 import ru.netology.nmedia.viewmodel.AuthViewModel
 
-
+@AndroidEntryPoint
 class AuthFragment : Fragment() {
     private val viewModel: AuthViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
