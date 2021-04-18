@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.core.net.toFile
 import androidx.lifecycle.*
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import androidx.paging.map
 import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,13 +44,9 @@ class PostViewModel @Inject constructor(
     private val workManager: WorkManager,
     auth: AppAuth,
 ) : ViewModel() {
-    private val cached = repository
-        .dataPaging
-        .cachedIn(viewModelScope)
-
     val dataPaging: Flow<PagingData<Post>> = auth.authStateFlow
         .flatMapLatest { (myId, _) ->
-            cached.map { pagingData ->
+            repository.dataPaging.map { pagingData ->
                 pagingData.map { post ->
                     post.copy(ownedByMe = post.authorId == myId)
                 }
